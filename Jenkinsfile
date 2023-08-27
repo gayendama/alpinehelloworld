@@ -6,7 +6,7 @@ pipeline {
         IMAGE_TAG = "latest"                      /*tag docker, par exemple latest*/
         STAGING = "env-staging"
         PRODUCTION = "env-prod"
-        DOCKERHUB_ID = "gayendama"
+        DOCKERHUB_ID = "ndamagaye"
         DOCKERHUB_PASSWORD = credentials('dockerhub')
         STG_API_ENDPOINT = "ip10-0-2-4-cjlj0d979sugqdpn18dg-1993.direct.docker.labs.eazytraining.fr"        /* Mettre le couple IP:PORT de votre API eazylabs, exemple 100.25.147.76:1993 */
         STG_APP_ENDPOINT = "ip10-0-2-4-cjlj0d979sugqdpn18dg-80.direct.docker.labs.eazytraining.fr"        /* Mettre le couple IP:PORT votre application en staging, exemple 100.25.147.76:8000 */
