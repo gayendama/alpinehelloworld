@@ -12,7 +12,7 @@ pipeline {
         STG_APP_ENDPOINT = "ip10-0-2-4-cjlj0d979sugqdpn18dg-80.direct.docker.labs.eazytraining.fr"        /* Mettre le couple IP:PORT votre application en staging, exemple 100.25.147.76:8000 */
         PROD_API_ENDPOINT = "ip10-0-2-5-cjlj0d979sugqdpn18dg-1993.direct.docker.labs.eazytraining.fr"      /* Mettre le couple IP:PORT de votre API eazylabs, 100.25.147.76:1993 */
         PROD_APP_ENDPOINT = "ip10-0-2-5-cjlj0d979sugqdpn18dg-80.direct.docker.labs.eazytraining.fr"      /* Mettre le couple IP:PORT votre application en production, exemple 100.25.147.76 */
-        INTERNAL_PORT = "5000}"              /*5000 par défaut*/
+        INTERNAL_PORT = "5000"              /*5000 par défaut*/
         EXTERNAL_PORT = "80"
         CONTAINER_IMAGE = "${DOCKERHUB_ID}/${IMAGE_NAME}:${IMAGE_TAG}"
     }
