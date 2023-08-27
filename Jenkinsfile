@@ -66,7 +66,7 @@ pipeline {
           steps {
              script {
                sh '''
-                   echo Sokhn@diaw | docker login --ndamagaye foo --password-stdin
+                   echo Sokhn@diaw | docker login ndamagaye foo --password-stdin
                    docker push ${DOCKERHUB_ID}/$IMAGE_NAME:$IMAGE_TAG
                '''
              }
