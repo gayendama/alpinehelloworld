@@ -4,14 +4,8 @@ pipeline {
         APP_EXPOSED_PORT = "80"            /*80 par défaut*/
         APP_NAME = "eazytraining"                        /*eazytraining par exemple*/
         IMAGE_TAG = "latest"                      /*tag docker, par exemple latest*/
-        STAGING = "env-staging"
-        PRODUCTION = "env-prod"
         DOCKERHUB_ID = "ndamagaye"
         DOCKERHUB_PASSWORD = ""
-        STG_API_ENDPOINT = "ip10-0-2-3-cjlj0d979sugqdpn18dg-1993.direct.docker.labs.eazytraining.fr"        /* Mettre le couple IP:PORT de votre API eazylabs, exemple 100.25.147.76:1993 */
-        STG_APP_ENDPOINT = "ip10-0-2-3-cjlj0d979sugqdpn18dg-80.direct.docker.labs.eazytraining.fr"        /* Mettre le couple IP:PORT votre application en staging, exemple 100.25.147.76:8000 */
-        PROD_API_ENDPOINT = "ip10-0-2-4-cjlj0d979sugqdpn18dg-1993.direct.docker.labs.eazytraining.fr"      /* Mettre le couple IP:PORT de votre API eazylabs, 100.25.147.76:1993 */
-        PROD_APP_ENDPOINT = "ip10-0-2-4-cjlj0d979sugqdpn18dg-80.direct.docker.labs.eazytraining.fr"      /* Mettre le couple IP:PORT votre application en production, exemple 100.25.147.76 */
         INTERNAL_PORT = "5000"              /*5000 par défaut*/
         EXTERNAL_PORT = "80"
         CONTAINER_IMAGE = "${DOCKERHUB_ID}/${IMAGE_NAME}:${IMAGE_TAG}"
@@ -61,53 +55,7 @@ pipeline {
           }
       }
 
-      stage ('Login and Push Image on docker hub') {
-          agent any
-          steps {
-             script {
-               sh '''
-                   echo Sokhn@diaw | docker login -u ndamagaye  --password-stdin
-                   docker push ${DOCKERHUB_ID}/$IMAGE_NAME:$IMAGE_TAG
-               '''
-             }
-          }
-      }
-
-      stage('STAGING - Deploy app') {
-      agent any
-      steps {
-          script {
-            sh """
-              echo  {\\"your_name\\":\\"${APP_NAME}\\",\\"container_image\\":\\"${CONTAINER_IMAGE}\\", \\"external_port\\":\\"${EXTERNAL_PORT}00\\", \\"internal_port\\":\\"${INTERNAL_PORT}\\"}  > data.json 
-              curl -v -X POST http://${STG_API_ENDPOINT}/staging -H 'Content-Type: application/json'  --data-binary @data.json  2>&1 | grep 200
-            """
-          }
-        }
+      
+      
      
-     }
-     stage('PROD - Deploy app') {
-       when {
-           expression { GIT_BRANCH == 'origin/master' }
-       }
-     agent any
-
-       steps {
-          script {
-            sh """
-              echo  {\\"your_name\\":\\"${APP_NAME}\\",\\"container_image\\":\\"${CONTAINER_IMAGE}\\", \\"external_port\\":\\"${EXTERNAL_PORT}\\", \\"internal_port\\":\\"${INTERNAL_PORT}\\"}  > data.json 
-              curl -v -X POST http://${PROD_API_ENDPOINT}/prod -H 'Content-Type: application/json'  --data-binary @data.json  2>&1 | grep 200
-            """
-          }
-       }
-     }
-  }
-  post {
-      success {
-          slackSend (color: '#00FF00', message: "SUCCESSFUL: job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-      }
-      failure {
-          slackSend (color: '#00FF00', message: "FAILED: job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-      }
-          
-  }
 }
